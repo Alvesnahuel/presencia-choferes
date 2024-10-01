@@ -56,8 +56,8 @@ function actualizarTabla(choferes) {
         
         // Aplicar clases según el estado
         const estado = chofer['Estado'].toLowerCase();
-        if (estado === 'EN DEPOSITO') {
-            estadoTd.classList.add('estado-EN DEPOSITO');
+        if (estado === 'ESPERANDO CARGA') {
+            estadoTd.classList.add('estado-ESPERANDO CARGA');
         } else if (estado === 'en ruta') {
             estadoTd.classList.add('estado-en-ruta');
         } else if (estado === 'en pausa') {
