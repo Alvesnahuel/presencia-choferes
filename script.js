@@ -62,7 +62,7 @@ function actualizarTabla(choferes) {
             estadoTd.classList.add('estado-en-ruta');
         } else if (estado === 'en pausa') {
             estadoTd.classList.add('estado-en-pausa');
-        } else if (estado === 'en depósito') { // Nueva condición para "En Depósito"
+        } else if (estado === 'en depósito') {
             estadoTd.classList.add('estado-disponible'); // Cambiar a verde
         }
         
@@ -104,4 +104,3 @@ cargarDatos();
 
 // Actualizar datos cada 60 segundos
 setInterval(cargarDatos, 60000);
-
