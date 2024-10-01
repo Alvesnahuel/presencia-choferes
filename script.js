@@ -1,3 +1,5 @@
+// script.js
+
 // ID de la hoja de Google Sheets
 const SHEET_ID = '1ove7LHy9idtZRgoQ8bGmbmPks2WQpLtOzjZJSAXGUBA'; // Reemplaza con tu ID real
 
@@ -7,7 +9,7 @@ const SHEET_NAME = 'Hoja1';
 // URL de la API de Google Sheets en formato JSON usando OpenSheet
 const API_URL = `https://opensheet.vercel.app/${SHEET_ID}/${SHEET_NAME}`;
 
-let estadoChart; // Variable para almacenar el gráfico
+let ultimaActualizacionGlobal = null; // Variable para almacenar la última actualización
 
 // Función para obtener los datos de Google Sheets
 async function obtenerDatos() {
@@ -26,7 +28,7 @@ function actualizarTabla(choferes) {
     const tbody = document.querySelector('#choferes-table tbody');
     tbody.innerHTML = ''; // Limpiar tabla
 
-    let ultimaActualizacion = '';
+    let ultimaActualizacion = null;
 
     choferes.forEach(chofer => {
         const tr = document.createElement('tr');
@@ -49,7 +51,7 @@ function actualizarTabla(choferes) {
         tr.appendChild(estadoTd);
 
         const actualizacionTd = document.createElement('td');
-        actualizacionTd.textContent = chofer['Última Actualización'];
+        actualizacionTd.textContent = formatearFechaHora(chofer['Última Actualización']);
         tr.appendChild(actualizacionTd);
 
         const ubicacionTd = document.createElement('td');
@@ -67,67 +69,30 @@ function actualizarTabla(choferes) {
 
     // Mostrar la última actualización en el DOM
     const ultimaActualizacionElem = document.getElementById('ultima-actualizacion');
-    if (ultimaActualizacion) {
-        ultimaActualizacionElem.textContent = `Última actualización: ${ultimaActualizacion.toLocaleString()}`;
+    if (ultimaActualizacion && (!ultimaActualizacionGlobal || ultimaActualizacion > ultimaActualizacionGlobal)) {
+        ultimaActualizacionGlobal = ultimaActualizacion;
+        ultimaActualizacionElem.textContent = `Última actualización: ${formatearFechaHora(ultimaActualizacion)}`;
     }
 }
 
-// Función para actualizar el gráfico
-function actualizarGrafico(choferes) {
-    const estados = choferes.map(chofer => chofer['Estado'].toLowerCase());
-    const conteo = {
-        disponible: estados.filter(e => e === 'disponible').length,
-        en_ruta: estados.filter(e => e === 'en ruta').length,
-        en_pausa: estados.filter(e => e === 'en pausa').length
+// Función para formatear la fecha y hora
+function formatearFechaHora(fecha) {
+    const opciones = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
     };
-
-    const ctx = document.getElementById('estadoChart').getContext('2d');
-
-    if (estadoChart) {
-        estadoChart.destroy();
-    }
-
-    estadoChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Disponible', 'En Ruta', 'En Pausa'],
-            datasets: [{
-                label: '# de Choferes',
-                data: [conteo.disponible, conteo.en_ruta, conteo.en_pausa],
-                backgroundColor: [
-                    'rgba(40, 167, 69, 0.7)', // Verde
-                    'rgba(255, 193, 7, 0.7)',  // Amarillo
-                    'rgba(220, 53, 69, 0.7)'   // Rojo
-                ],
-                borderColor: [
-                    'rgba(40, 167, 69, 1)',
-                    'rgba(255, 193, 7, 1)',
-                    'rgba(220, 53, 69, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                }
-            }
-        }
-    });
+    const fechaObj = new Date(fecha);
+    return fechaObj.toLocaleString('es-ES', opciones);
 }
 
 // Función principal para cargar y actualizar datos
 async function cargarDatos() {
     const choferes = await obtenerDatos();
     actualizarTabla(choferes);
-    actualizarGrafico(choferes);
 }
 
 // Cargar datos inicialmente
