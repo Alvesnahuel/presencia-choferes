@@ -1,7 +1,7 @@
 // script.js
 
 // ID de la hoja de Google Sheets
-const SHEET_ID = 'TU_ID_DE_LA_HOJA_AQUÍ'; // Reemplaza con tu ID real
+const SHEET_ID = '1ove7LHy9idtZRgoQ8bGmbmPks2WQpLtOzjZJSAXGUBA'; // Reemplaza con tu ID real
 
 // Nombre de la hoja (puede ser "Hoja1" u otro nombre si lo cambiaste)
 const SHEET_NAME = 'Hoja1';
