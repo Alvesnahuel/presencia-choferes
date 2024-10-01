@@ -53,6 +53,7 @@ function actualizarTabla(choferes) {
 
         const estadoTd = document.createElement('td');
         estadoTd.textContent = chofer['Estado'];
+        
         // Aplicar clases según el estado
         const estado = chofer['Estado'].toLowerCase();
         if (estado === 'disponible') {
@@ -61,7 +62,10 @@ function actualizarTabla(choferes) {
             estadoTd.classList.add('estado-en-ruta');
         } else if (estado === 'en pausa') {
             estadoTd.classList.add('estado-en-pausa');
+        } else if (estado === 'en depósito') { // Nueva condición para "En Depósito"
+            estadoTd.classList.add('estado-disponible'); // Cambiar a verde
         }
+        
         tr.appendChild(estadoTd);
 
         const actualizacionTd = document.createElement('td');
@@ -100,3 +104,4 @@ cargarDatos();
 
 // Actualizar datos cada 60 segundos
 setInterval(cargarDatos, 60000);
+
