@@ -33,6 +33,15 @@ function formatearFechaHora(fecha) {
     return fechaObj.toLocaleString('es-ES', opciones);
 }
 
+// Normalizar texto (eliminar espacios adicionales y tildes)
+function normalizarTexto(texto) {
+    return texto
+        .toLowerCase()
+        .trim()
+        .normalize('NFD') // Para remover tildes
+        .replace(/[\u0300-\u036f]/g, "");
+}
+
 // Función para actualizar la tabla
 function actualizarTabla(choferes) {
     const tbody = document.querySelector('#choferes-table tbody');
@@ -50,16 +59,16 @@ function actualizarTabla(choferes) {
         const estadoTd = document.createElement('td');
         estadoTd.textContent = chofer['Estado'];
 
-        // Aplicar clases según el estado en mayúsculas
-        const estado = chofer['Estado'].trim().toUpperCase(); // Convertir el estado a mayúsculas
+        // Normalizar y aplicar clases según el estado
+        const estado = normalizarTexto(chofer['Estado']);
 
-        if (estado === 'ESPERANDO CARGA') {
+        if (estado === 'esperando carga') {
             estadoTd.classList.add('estado-ESPERANDO-CARGA');
-        } else if (estado === 'EN RUTA') {
+        } else if (estado === 'en ruta') {
             estadoTd.classList.add('estado-EN-RUTA');
-        } else if (estado === 'EN PAUSA') {
+        } else if (estado === 'en pausa') {
             estadoTd.classList.add('estado-EN-PAUSA');
-        } else if (estado === 'EN DEPÓSITO' || estado === 'EN DEPOSITO') {
+        } else if (estado === 'en deposito' || estado === 'en depósito') {
             estadoTd.classList.add('estado-EN-DEPOSITO');
         }
         
@@ -100,5 +109,4 @@ async function cargarDatos() {
 cargarDatos();
 
 // Actualizar datos cada 60 segundos
-setInterval(cargarDatos, 60000);
-
+setInterval(cargarDatos, 20000);
