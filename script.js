@@ -68,7 +68,7 @@ function actualizarTabla(choferes) {
             estadoTd.classList.add('estado-EN-RUTA');
         } else if (estado === 'en pausa') {
             estadoTd.classList.add('estado-EN-PAUSA');
-        } else if (estado === 'en deposito' || estado === 'EN DEPOSITO') {
+        } else if (estado === 'EN DEPOSITO ' || estado === 'EN DEPOSITO') {
             estadoTd.classList.add('estado-EN-DEPOSITO');
         }
         
