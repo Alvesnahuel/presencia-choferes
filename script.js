@@ -109,5 +109,5 @@ async function cargarDatos() {
 cargarDatos();
 
 // Actualizar datos cada 60 segundos
-setInterval(cargarDatos, 60000);
+setInterval(cargarDatos, 10000);
 
