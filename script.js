@@ -14,16 +14,17 @@ function actualizarTabla(choferes) {
 
         const estadoTd = document.createElement('td');
         estadoTd.textContent = chofer['Estado'];
-        
-        // Aplicar clases según el estado
-        const estado = chofer['Estado'].toLowerCase(); // Convertir a minúsculas para evitar errores
-        if (estado === 'esperando carga') {
-            estadoTd.classList.add('estado-esperando-carga');
-        } else if (estado === 'en ruta') {
-            estadoTd.classList.add('estado-en-ruta');
-        } else if (estado === 'en pausa') {
-            estadoTd.classList.add('estado-en-pausa');
-        } else if (estado === 'EN DEPOSITO') { // Asegurarse de que el texto coincida exactamente
+
+        // Aplicar clases según el estado en mayúsculas
+        const estado = chofer['Estado'].trim().toUpperCase(); // Convertir el estado a mayúsculas
+
+        if (estado === 'ESPERANDO CARGA') {
+            estadoTd.classList.add('estado-ESPERANDO-CARGA');
+        } else if (estado === 'EN RUTA') {
+            estadoTd.classList.add('estado-EN-RUTA');
+        } else if (estado === 'EN PAUSA') {
+            estadoTd.classList.add('estado-EN-PAUSA');
+        } else if (estado === 'EN DEPÓSITO' || estado === 'EN DEPOSITO') { // Aceptamos ambas variantes
             estadoTd.classList.add('estado-EN-DEPOSITO');
         }
         
