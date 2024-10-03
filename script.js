@@ -23,8 +23,8 @@ function actualizarTabla(choferes) {
             estadoTd.classList.add('estado-en-ruta');
         } else if (estado === 'en pausa') {
             estadoTd.classList.add('estado-en-pausa');
-        } else if (estado === 'en depósito') { // Asegurarse de que el texto coincida exactamente
-            estadoTd.classList.add('estado-en-deposito');
+        } else if (estado === 'EN DEPOSITO') { // Asegurarse de que el texto coincida exactamente
+            estadoTd.classList.add('estado-EN-DEPOSITO');
         }
         
         tr.appendChild(estadoTd);
