@@ -54,3 +54,4 @@ function actualizarTabla(choferes) {
         ultimaActualizacionElem.textContent = `Última actualización: ${formatearFechaHora(ultimaActualizacion)}`;
     }
 }
+
