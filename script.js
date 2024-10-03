@@ -63,7 +63,7 @@ function actualizarTabla(choferes) {
         } else if (estado === 'en pausa') {
             estadoTd.classList.add('estado-en-pausa');
         } else if (estado === 'en depósito') {
-            estadoTd.classList.add('estado-disponible'); // Cambiar a verde
+            estadoTd.classList.add('estado-en-deposito'); // Cambiar a verde
         }
 
         tr.appendChild(estadoTd);
