@@ -1,42 +1,3 @@
-// script.js
-
-// ID de la hoja de Google Sheets
-const SHEET_ID = '1ove7LHy9idtZRgoQ8bGmbmPks2WQpLtOzjZJSAXGUBA'; // Reemplaza con tu ID real
-
-// Nombre de la hoja (puede ser "Hoja1" u otro nombre si lo cambiaste)
-const SHEET_NAME = 'Hoja1';
-
-// URL de la API de Google Sheets en formato JSON usando OpenSheet
-const API_URL = `https://opensheet.vercel.app/${SHEET_ID}/${SHEET_NAME}`;
-
-let ultimaActualizacionGlobal = null; // Variable para almacenar la última actualización
-
-// Función para obtener los datos de Google Sheets
-async function obtenerDatos() {
-    try {
-        const respuesta = await fetch(API_URL);
-        const datos = await respuesta.json();
-        return datos;
-    } catch (error) {
-        console.error('Error al obtener los datos:', error);
-        return [];
-    }
-}
-
-// Función para formatear la fecha y hora
-function formatearFechaHora(fecha) {
-    const opciones = {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-    };
-    const fechaObj = new Date(fecha);
-    return fechaObj.toLocaleString('es-ES', opciones);
-}
-
 // Función para actualizar la tabla
 function actualizarTabla(choferes) {
     const tbody = document.querySelector('#choferes-table tbody');
@@ -55,17 +16,17 @@ function actualizarTabla(choferes) {
         estadoTd.textContent = chofer['Estado'];
         
         // Aplicar clases según el estado
-        const estado = chofer['Estado'].toLowerCase();
-        if (estado === 'en deposito') { 
-            estadoTd.classList.add('estado-en-deposito'); 
+        const estado = chofer['Estado'].toLowerCase(); // Convertir a minúsculas para evitar errores
+        if (estado === 'esperando carga') {
+            estadoTd.classList.add('estado-esperando-carga');
         } else if (estado === 'en ruta') {
             estadoTd.classList.add('estado-en-ruta');
         } else if (estado === 'en pausa') {
             estadoTd.classList.add('estado-en-pausa');
-        } else if (estado === 'en depósito') {
-            estadoTd.classList.add('estado-en-deposito'); // Cambiar a verde
+        } else if (estado === 'en depósito') { // Asegurarse de que el texto coincida exactamente
+            estadoTd.classList.add('estado-en-deposito');
         }
-
+        
         tr.appendChild(estadoTd);
 
         const actualizacionTd = document.createElement('td');
@@ -92,16 +53,3 @@ function actualizarTabla(choferes) {
         ultimaActualizacionElem.textContent = `Última actualización: ${formatearFechaHora(ultimaActualizacion)}`;
     }
 }
-
-// Función principal para cargar y actualizar datos
-async function cargarDatos() {
-    const choferes = await obtenerDatos();
-    actualizarTabla(choferes);
-}
-
-// Cargar datos inicialmente
-cargarDatos();
-
-// Actualizar datos cada 60 segundos
-setInterval(cargarDatos, 20000);
-
