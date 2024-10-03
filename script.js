@@ -1,3 +1,38 @@
+// ID de la hoja de Google Sheets
+const SHEET_ID = '1ove7LHy9idtZRgoQ8bGmbmPks2WQpLtOzjZJSAXGUBA'; // Reemplaza con tu ID real
+const SHEET_NAME = 'Hoja1';
+
+// URL de la API de Google Sheets en formato JSON usando OpenSheet
+const API_URL = `https://opensheet.vercel.app/${SHEET_ID}/${SHEET_NAME}`;
+
+let ultimaActualizacionGlobal = null; // Variable para almacenar la última actualización
+
+// Función para obtener los datos de Google Sheets
+async function obtenerDatos() {
+    try {
+        const respuesta = await fetch(API_URL);
+        const datos = await respuesta.json();
+        return datos;
+    } catch (error) {
+        console.error('Error al obtener los datos:', error);
+        return [];
+    }
+}
+
+// Función para formatear la fecha y hora
+function formatearFechaHora(fecha) {
+    const opciones = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+    };
+    const fechaObj = new Date(fecha);
+    return fechaObj.toLocaleString('es-ES', opciones);
+}
+
 // Función para actualizar la tabla
 function actualizarTabla(choferes) {
     const tbody = document.querySelector('#choferes-table tbody');
@@ -24,7 +59,7 @@ function actualizarTabla(choferes) {
             estadoTd.classList.add('estado-EN-RUTA');
         } else if (estado === 'EN PAUSA') {
             estadoTd.classList.add('estado-EN-PAUSA');
-        } else if (estado === 'EN DEPÓSITO' || estado === 'EN DEPOSITO') { // Aceptamos ambas variantes
+        } else if (estado === 'EN DEPÓSITO' || estado === 'EN DEPOSITO') {
             estadoTd.classList.add('estado-EN-DEPOSITO');
         }
         
@@ -54,4 +89,16 @@ function actualizarTabla(choferes) {
         ultimaActualizacionElem.textContent = `Última actualización: ${formatearFechaHora(ultimaActualizacion)}`;
     }
 }
+
+// Función principal para cargar y actualizar datos
+async function cargarDatos() {
+    const choferes = await obtenerDatos();
+    actualizarTabla(choferes);
+}
+
+// Cargar datos inicialmente
+cargarDatos();
+
+// Actualizar datos cada 60 segundos
+setInterval(cargarDatos, 60000);
 
